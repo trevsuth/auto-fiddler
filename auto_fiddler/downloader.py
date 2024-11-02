@@ -3,8 +3,9 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
+
 class FileDownloader:
-    def __init__(self, base_url, download_folder='downloads'):
+    def __init__(self, base_url, download_folder="downloads"):
         self.base_url = base_url
         self.download_folder = download_folder
         os.makedirs(download_folder, exist_ok=True)
@@ -13,13 +14,13 @@ class FileDownloader:
         try:
             response = requests.get(self.base_url)
             response.raise_for_status()
-            soup = BeautifulSoup(response.text, 'html.parser')
-            links = soup.find_all('a', href=True)
-            
+            soup = BeautifulSoup(response.text, "html.parser")
+            links = soup.find_all("a", href=True)
+
             file_links = [
-                urljoin(self.base_url, link['href'])
+                urljoin(self.base_url, link["href"])
                 for link in links
-                if link['href'].endswith(file_extension)
+                if link["href"].endswith(file_extension)
             ]
             return file_links
 
@@ -34,17 +35,18 @@ class FileDownloader:
             return
 
         for link in file_links:
-            file_name = os.path.join(self.download_folder, link.split('/')[-1])
+            file_name = os.path.join(self.download_folder, link.split("/")[-1])
             try:
                 response = requests.get(link)
                 response.raise_for_status()
-                
-                with open(file_name, 'wb') as file:
+
+                with open(file_name, "wb") as file:
                     file.write(response.content)
                 print(f"Downloaded: {file_name}")
-                
+
             except requests.RequestException as e:
                 print(f"Failed to download {link}: {e}")
+
 
 # Usage example:
 # downloader = FileDownloader("https://example.com/files", "downloaded_files")

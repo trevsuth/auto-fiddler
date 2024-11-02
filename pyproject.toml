@@ -11,6 +11,10 @@ music21 = "^9.3.0"
 beautifulsoup4 = "^4.12.3"
 
 
+[tool.poetry.group.dev.dependencies]
+black = "^24.10.0"
+pytest = "^8.3.3"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
