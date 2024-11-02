@@ -1,7 +1,7 @@
 ---
     name: Lint
     
-    on: # yamllint disable-line rule:truthy
+    on:
       push: null
       pull_request: null
     
@@ -30,4 +30,4 @@
             uses: super-linter/super-linter@v7.1.0 # x-release-please-version
             env:
               # To report GitHub Actions status checks
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}>
