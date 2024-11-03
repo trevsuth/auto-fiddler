@@ -1,25 +1,50 @@
+"""Class for downloading files from a webpage"""
+
 import os
-import requests
-from bs4 import BeautifulSoup
+from pathlib import Path
+from typing import List
 from urllib.parse import urljoin
 
+import requests
+from bs4 import BeautifulSoup
+
+
 class FileDownloader:
-    def __init__(self, base_url, download_folder='downloads'):
+    """Class for downloading files from websites"""
+
+    def __init__(self, base_url: str,
+                 download_folder: Path = "downloads"
+                 ) -> None:
+        """initializes the class
+
+        Args:
+            base_url (path): Website to scan
+            download_folder (str, optional): Folder to download to.
+                Defaults to "downloads".
+        """
         self.base_url = base_url
         self.download_folder = download_folder
         os.makedirs(download_folder, exist_ok=True)
 
-    def get_file_links(self, file_extension):
+    def get_file_links(self, file_extension: str) -> List[str]:
+        """gets a list of all files referenced on a given webpage
+
+        Args:
+            file_extension (str): file extension we are looking for
+
+        Returns:
+            List[str]: list of files downloadable from the website
+        """
         try:
-            response = requests.get(self.base_url)
+            response = requests.get(self.base_url, timeout=10)
             response.raise_for_status()
-            soup = BeautifulSoup(response.text, 'html.parser')
-            links = soup.find_all('a', href=True)
-            
+            soup = BeautifulSoup(response.text, "html.parser")
+            links = soup.find_all("a", href=True)
+
             file_links = [
-                urljoin(self.base_url, link['href'])
+                urljoin(self.base_url, link["href"])
                 for link in links
-                if link['href'].endswith(file_extension)
+                if link["href"].endswith(file_extension)
             ]
             return file_links
 
@@ -27,25 +52,32 @@ class FileDownloader:
             print(f"Error fetching links: {e}")
             return []
 
-    def download_files(self, file_extension):
+    def download_files(self, file_extension: str) -> None:
+        """Downloads files with a given file extension from a website
+
+        Args:
+            file_extension (str): file extension to download
+        """
         file_links = self.get_file_links(file_extension)
         if not file_links:
             print("No files found with the given extension.")
             return
 
         for link in file_links:
-            file_name = os.path.join(self.download_folder, link.split('/')[-1])
+            file_name = os.path.join(self.download_folder, link.split("/")[-1])
             try:
-                response = requests.get(link)
+                response = requests.get(link, timeout=10)
                 response.raise_for_status()
-                
-                with open(file_name, 'wb') as file:
+
+                with open(file_name, "wb") as file:
                     file.write(response.content)
                 print(f"Downloaded: {file_name}")
-                
+
             except requests.RequestException as e:
                 print(f"Failed to download {link}: {e}")
 
-# Usage example:
-# downloader = FileDownloader("https://example.com/files", "downloaded_files")
-# downloader.download_files(".pdf")
+
+if __name__ == "__main__":
+    downloader = FileDownloader("https://example.com/files",
+                                "downloaded_files")
+    downloader.download_files(".pdf")
