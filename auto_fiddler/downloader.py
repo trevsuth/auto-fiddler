@@ -12,19 +12,19 @@ from bs4 import BeautifulSoup
 class FileDownloader:
     """Class for downloading files from websites"""
 
-    def __init__(self, base_url: str,
-                 download_folder: Path = "./downloads"
-                 ) -> None:
+    def __init__(
+        self, source_website_url: str, target_folder: Path = "./downloads"
+    ) -> None:
         """initializes the class
 
         Args:
-            base_url (path): Website to scan
-            download_folder (str, optional): Folder to download to.
+            source_url (path): Website to scan
+            target_folder (str, optional): Folder to download to.
                 Defaults to "downloads".
         """
-        self.base_url = base_url
-        self.download_folder = download_folder
-        os.makedirs(download_folder, exist_ok=True)
+        self.source_url = source_website_url
+        self.target_folder = target_folder
+        os.makedirs(target_folder, exist_ok=True)
 
     def get_file_links(self, file_extension: str) -> List[str]:
         """gets a list of all files referenced on a given webpage
@@ -36,13 +36,13 @@ class FileDownloader:
             List[str]: list of files downloadable from the website
         """
         try:
-            response = requests.get(self.base_url, timeout=10)
+            response = requests.get(self.source_url, timeout=10)
             response.raise_for_status()
             soup = BeautifulSoup(response.text, "html.parser")
             links = soup.find_all("a", href=True)
 
             file_links = [
-                urljoin(self.base_url, link["href"])
+                urljoin(self.source_url, link["href"])
                 for link in links
                 if link["href"].endswith(file_extension)
             ]
@@ -64,7 +64,7 @@ class FileDownloader:
             return
 
         for link in file_links:
-            file_name = os.path.join(self.download_folder, link.split("/")[-1])
+            file_name = os.path.join(self.target_folder, link.split("/")[-1])
             try:
                 response = requests.get(link, timeout=10)
                 response.raise_for_status()
@@ -78,6 +78,5 @@ class FileDownloader:
 
 
 if __name__ == "__main__":
-    downloader = FileDownloader("https://example.com/files",
-                                "downloaded_files")
+    downloader = FileDownloader("https://example.com/files", "downloaded_files")
     downloader.download_files(".pdf")
