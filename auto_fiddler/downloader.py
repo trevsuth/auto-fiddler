@@ -13,7 +13,7 @@ class FileDownloader:
     """Class for downloading files from websites"""
 
     def __init__(self, base_url: str,
-                 download_folder: Path = "downloads"
+                 download_folder: Path = "./downloads"
                  ) -> None:
         """initializes the class
 
