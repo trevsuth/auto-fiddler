@@ -11,6 +11,21 @@ from bs4 import BeautifulSoup
 class FileDownloader:
     """Class for downloading files from websites"""
 
+<<<<<<< HEAD:auto_fiddler/downloader.py
+    def __init__(
+        self, source_website_url: str, target_folder: Path = "./downloads"
+    ) -> None:
+        """initializes the class
+
+        Args:
+            source_url (path): Website to scan
+            target_folder (str, optional): Folder to download to.
+                Defaults to "downloads".
+        """
+        self.source_url = source_website_url
+        self.target_folder = target_folder
+        os.makedirs(target_folder, exist_ok=True)
+=======
     def __init__(self, website: str, folder: Path = Path("downloads")) -> None:
         """initializes the class
 
@@ -22,6 +37,7 @@ class FileDownloader:
         self.url = website
         self.target_folder = folder
         os.makedirs(folder, exist_ok=True)
+>>>>>>> origin/develop:auto_fiddler/data_collection/downloader.py
 
     def get_file_links(self, file_extension: str) -> List[str]:
         """gets a list of all files referenced on a given webpage
@@ -33,13 +49,21 @@ class FileDownloader:
             List[str]: list of files downloadable from the website
         """
         try:
+<<<<<<< HEAD:auto_fiddler/downloader.py
+            response = requests.get(self.source_url, timeout=10)
+=======
             response = requests.get(self.url, timeout=10)
+>>>>>>> origin/develop:auto_fiddler/data_collection/downloader.py
             response.raise_for_status()
             soup = BeautifulSoup(response.text, "html.parser")
             links = soup.find_all("a", href=True)
 
             file_links = [
+<<<<<<< HEAD:auto_fiddler/downloader.py
+                urljoin(self.source_url, link["href"])
+=======
                 urljoin(self.url, link["href"])
+>>>>>>> origin/develop:auto_fiddler/data_collection/downloader.py
                 for link in links
                 if link["href"].endswith(file_extension)
             ]
@@ -75,7 +99,11 @@ class FileDownloader:
 
 
 if __name__ == "__main__":
+<<<<<<< HEAD:auto_fiddler/downloader.py
+    downloader = FileDownloader("https://example.com/files", "downloaded_files")
+=======
     url = "https://example.com/files"
     path = Path("./downloaded_files")
     downloader = FileDownloader(url, path)
+>>>>>>> origin/develop:auto_fiddler/data_collection/downloader.py
     downloader.download_files(".pdf")
