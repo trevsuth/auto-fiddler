@@ -4,7 +4,7 @@ from pathlib import Path
 from auto_fiddler.data_collection.downloader import FileDownloader
 
 
-url = "https://nigelgatherer.com/tunes/abc/abc1.html"
+website = "https://nigelgatherer.com/tunes/abc/abc1.html"
 path = Path("./downloaded_files")
-downloader = FileDownloader(url, path)
+downloader = FileDownloader(website, path)
 downloader.download_files(".abc")
