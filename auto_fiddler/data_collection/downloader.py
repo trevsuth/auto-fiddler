@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 from typing import List
 from urllib.parse import urljoin
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -12,7 +13,7 @@ class FileDownloader:
     """Class for downloading files from websites"""
 
     def __init__(
-        self, source_website_url: str, target_folder: Path = "./downloads"
+        self, source_website_url: str, target_folder: Path = Path("./downloads")
     ) -> None:
         """initializes the class
 
@@ -74,8 +75,3 @@ class FileDownloader:
 
             except requests.RequestException as e:
                 print(f"Failed to download {link}: {e}")
-
-
-if __name__ == "__main__":
-    downloader = FileDownloader("https://example.com/files", "downloaded_files")
-    downloader.download_files(".pdf")
