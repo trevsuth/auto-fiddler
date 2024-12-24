@@ -2,7 +2,7 @@ from pathlib import Path
 from auto_fiddler.download import Downloader
 
 
-def main():
+def download() -> None:
     # Paths to YAML files containing the sites
     abc_sites_file = Path("./auto_fiddler/abc.yaml")
     txt_sites_file = Path("./auto_fiddler/txt.yaml")
@@ -32,4 +32,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    download()
